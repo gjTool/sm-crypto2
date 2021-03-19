@@ -1,5 +1,5 @@
 /**
- * 左补 0 到指定长度
+ * 左补0到指定长度
  */
 function leftPad(input, num) {
   if (input.length >= num) return input
@@ -36,44 +36,11 @@ function hex2binary(hex) {
  */
 function str2binary(str) {
   let binary = ''
-
   for (let i = 0, len = str.length; i < len; i++) {
-    const point = str.codePointAt(i)
-
-    if (point <= 0x007f) {
-      // 单字节，标量值：00000000 00000000 0zzzzzzz
-      binary += leftPad(point.toString(2), 8)
-    } else if (point <= 0x07ff) {
-      // 双字节，标量值：00000000 00000yyy yyzzzzzz
-      binary += leftPad((0xc0 | (point >>> 6)).toString(2), 8) // 110yyyyy（0xc0-0xdf）
-      binary += leftPad((0x80 | (point & 0x3f)).toString(2), 8) // 10zzzzzz（0x80-0xbf）
-    } else if (point <= 0xD7FF || (point >= 0xE000 && point <= 0xFFFF)) {
-      // 三字节：标量值：00000000 xxxxyyyy yyzzzzzz
-      binary += leftPad((0xe0 | (point >>> 12)).toString(2), 8) // 1110xxxx（0xe0-0xef）
-      binary += leftPad((0x80 | ((point >>> 6) & 0x3f)).toString(2), 8) // 10yyyyyy（0x80-0xbf）
-      binary += leftPad((0x80 | (point & 0x3f)).toString(2), 8) // 10zzzzzz（0x80-0xbf）
-    } else if (point >= 0x010000 && point <= 0x10FFFF) {
-      // 四字节：标量值：000wwwxx xxxxyyyy yyzzzzzz
-      i++
-      binary += leftPad((0xf0 | ((point >>> 18) & 0x1c)).toString(2), 8) // 11110www（0xf0-0xf7）
-      binary += leftPad((0x80 | ((point >>> 12) & 0x3f)).toString(2), 8) // 10xxxxxx（0x80-0xbf）
-      binary += leftPad((0x80 | ((point >>> 6) & 0x3f)).toString(2), 8) // 10yyyyyy（0x80-0xbf）
-      binary += leftPad((0x80 | (point & 0x3f)).toString(2), 8) // 10zzzzzz（0x80-0xbf）
-    } else {
-      // 五、六字节，暂时不支持
-      binary += leftPad(point.toString(2), 8)
-      throw new Error('input is not supported')
-    }
+    const ch = str[i]
+    binary += leftPad(ch.codePointAt(0).toString(2), 8)
   }
-
   return binary
-}
-
-/**
- * 数组转为二进制
- */
-function array2binary(arr) {
-  return arr.reduce((temp, item) => temp + leftPad(item.toString(2), 8), '')
 }
 
 /**
@@ -127,8 +94,8 @@ function add(x, y) {
   const result = binaryCal(x, y, (a, b, prevResult) => {
     const carry = prevResult ? prevResult[1] : '0' || '0'
 
-    // a, b 不等时,carry 不变，结果与 carry 相反
-    // a, b 相等时，结果等于原 carry，新 carry 等于 a
+    // a,b不等时,carry不变，结果与carry相反
+    // a,b相等时，结果等于原carry，新carry等于a
     if (a !== b) return [carry === '0' ? '1' : '0', carry]
 
     return [carry, a]
@@ -243,12 +210,12 @@ function CF(V, Bi) {
 }
 
 module.exports = function (str) {
-  const binary = typeof str === 'string' ? str2binary(str) : array2binary(str)
+  const binary = str2binary(str)
 
   // 填充
   const len = binary.length
 
-  // k 是满足 len + 1 + k = 448mod512 的最小的非负整数
+  // k是满足len + 1 + k = 448mod512的最小的非负整数
   let k = len % 512
 
   // 如果 448 <= (512 % len) < 512，需要多补充 (len % 448) 比特'0'以满足总比特长度为512的倍数

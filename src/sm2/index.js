@@ -31,8 +31,8 @@ function doEncrypt(msg, publicKey, cipherMode = 1) {
   cipher.doFinal(c3)
   c3 = _.arrayToHex(c3)
 
-  const result = cipherMode === C1C2C3 ? c1 + c2 + c3 : c1 + c3 + c2,
-  return '04'+result
+  let result = cipherMode === C1C2C3 ? c1 + c2 + c3 : c1 + c3 + c2
+  return '04' + result
 }
 
 /**
