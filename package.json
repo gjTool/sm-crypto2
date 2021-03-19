@@ -1,6 +1,6 @@
 {
   "name": "sm-crypto2",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "bundleDependencies": false,
   "dependencies": {
     "jsbn": "^1.1.0"
